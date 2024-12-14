@@ -97,6 +97,7 @@ while (true) {
     
     $users[$userId] = [
         'tg_id' => $userId,
+        'points' => 0,
         'saved_at' => date('Y-m-d H:i:s')
     ];
     
@@ -186,9 +187,6 @@ while (true) {
         printGreen("Total PX Earned [ +$totalPoints ]\n\n");
     }
 
-    $rewards = [];
-    $headers = [];
-
     foreach ($users as $userId => $userData) {
         $tgId = $userData['tg_id'];
         
@@ -202,13 +200,13 @@ while (true) {
         if ($httpCode === 200) {
             $reward = extractReward($response);
             if ($reward) {
-                $rewards[$userId] = $reward;
-                $headers[$userId] = $reqHeaders;
-                printGreen("[ SUCCESS ] ++ Injected to $userId.\n");
+                $users[$userId]['points'] += $reward;
+                $totalPoints += $reward;
+                printGreen("[ SUCCESS ] ++ $userId +$reward PX\n");
             } else {
                 printGreen("[ ERROR ] Ads watching limit reached.\n");
                 printGreen("[ SOLUTION ] Try VPN or wait for 24 hours.\n");
-                continue;
+               continue;
             }
         } elseif ($httpCode === 403) {
             printGreen("[ ERROR ] Seems like your IP address is banned\n");
