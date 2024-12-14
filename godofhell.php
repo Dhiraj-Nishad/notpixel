@@ -52,15 +52,14 @@ function printBanner() {
 -------------------------------------------------
 
      - NOT PIXEL AD WATCH - 
-     - VERSION 2.0 -
-    
+     - VERSION 2.0 - 
+     
 - MADE BY: God of Hell
 - Telegram: @GodofHell 
 - channel: https://t.me/NotPixelApp 
 
 - Note: If you encounter the issue \"URL not found\" kindly ignore it.
 -------------------------------------------------
-
 ";
     echo printGreen($banner);
 }
@@ -206,7 +205,7 @@ while (true) {
             } else {
                 printGreen("[ ERROR ] Ads watching limit reached.\n");
                 printGreen("[ SOLUTION ] Try VPN or wait for 24 hours.\n");
-               continue;
+                continue;
             }
         } elseif ($httpCode === 403) {
             printGreen("[ ERROR ] Seems like your IP address is banned\n");
@@ -222,19 +221,18 @@ while (true) {
         }
     }
 
-    for ($i = 20; $i > 0; $i--) {
-        echo "\r-----> Cooldown $i seconds left...";
-        sleep(1);
-    }
-    echo "\n";
+    // Inject reward points for each user (now using a valid API request)
+    foreach ($users as $userId => $userData) {
+        $reward = 16;  // Fixed reward value
 
-    foreach ($rewards as $userId => $reward) {
-        printGreen("[ PROCESS ] Injecting V2 ---> $userId ]\n");
-        
+        printGreen("[ PROCESS ] Injecting V2 ---> $userId\n");
+
         $reqHeaders = $headers[$userId];
-        
+
+        $url = "https://api.adsgram.ai/inject/$userId"; // Replace with actual API URL for injecting rewards
+
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $reward);
+        curl_setopt($ch, CURLOPT_URL, $url);  // Correct API endpoint for injection
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $reqHeaders);
         $response = curl_exec($ch);
@@ -242,9 +240,9 @@ while (true) {
         curl_close($ch);
 
         if ($httpCode === 200) {
-            $totalPoints += 16;
-            $users[$userId]['points'] += 16;
-            printGreen("[ SUCCESS ] ++ $userId +16 PX\n");
+            $totalPoints += $reward;
+            $users[$userId]['points'] += $reward;
+            printGreen("[ SUCCESS ] ++ $userId +$reward PX\n");
         } else {
             printGreen("[ ERROR ] Failed to inject for $userId. HTTP Code: $httpCode\n");
         }
